@@ -34,8 +34,10 @@ const components = {
                             <input type="password" name="confirmPassword" placeholder="Confirm password" >
                             <div id="confirmPassword-error" class="message-error"></div>
 
+                        </div>  
                     </div>
-                    </div>
+                    <div id="sign-up-error" class="message-error"></div>
+                    <div id="sign-up-success" class="message-success"></div>
                 </div>
                 <div class="form-footer">
                         <a id="form-sign-in-link">Already have an account? Login</a>

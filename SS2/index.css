@@ -102,6 +102,12 @@
     border: none;
     cursor: pointer;
 }
+.btn:disabled ,.btn:disabled:hover{
+    background-color: #f2f2f2;
+    border: none;
+    box-shadow: none;
+    color: #ffffff;
+}
 .btn-register, .btn-sign-in{
     background-color: #4482ff;
     border: 1px solid #4482ff;
@@ -116,4 +122,7 @@
 .message-error{
     z-index: 99;
     color: #ff0000;
+}
+.message-success{
+    color: #00ff00;
 }

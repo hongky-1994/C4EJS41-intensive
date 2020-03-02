@@ -15,22 +15,26 @@ const view = {
                     event.preventDefault();
                     // 1. get Data
                     let signUpInfo = {
-                        firstName: form.firstName.value,
-                        lastName: form.lastName.value,
-                        email: form.email.value,
+                        firstName: form.firstName.value.trim(),
+                        lastName: form.lastName.value.trim(),
+                        email: form.email.value.trim().toLowerCase(),
                         password:form.password.value, 
                         confirmPassword: form.confirmPassword.value 
                     }
-                    console.log(signUpInfo);
                     
                     // 2. validate data
-                    view.validate(signUpInfo.firstName,'#firstName-error','Missing First Name')
-                    view.validate(signUpInfo.lastName,'#lastName-error','Missing Last Name')
-                    view.validate(signUpInfo.email,'#email-error','Missing Email')
-                    view.validate(signUpInfo.password.length >= 6 ,'#password-error','Password length less than 6')
-                    view.validate(signUpInfo.confirmPassword == signUpInfo.password,'#confirmPassword-error','Mismatch Password')
-
+                    let validateResult = [
+                        view.validate(signUpInfo.firstName,'#firstName-error','Missing First Name'),
+                        view.validate(signUpInfo.lastName,'#lastName-error','Missing Last Name'),
+                        view.validate(signUpInfo.email,'#email-error','Missing Email'),
+                        view.validate(signUpInfo.password.length >= 6 && signUpInfo.password,'#password-error','Invalid Password'),
+                        view.validate(signUpInfo.confirmPassword == signUpInfo.password && signUpInfo.confirmPassword,'#confirmPassword-error','Invalid Confirm Password')
+                    ];
+                    
                     // 3. submit data (next class)
+                    if(view.allPassed(validateResult)) {
+                        controller.signUp(signUpInfo);
+                    }
                 }
             
                 
@@ -49,14 +53,15 @@ const view = {
                     event.preventDefault();
                     // 1. get Data
                     let signInInfo = {
-                        email: form.email.value,
-                        password:form.password.value, 
+                        email: form.email.value.trim().toLowerCase(),
+                        password:form.password.value,
                     }
-                    console.log(signInInfo);
                     
                     // 2. validate data
-                    view.validate(signInInfo.email,'#email-error','Missing Email')
-                    view.validate(signInInfo.password.length >= 6 ,'#password-error','Password length less than 6')
+                    let validateResult = [
+                        view.validate(signInInfo.email,'#email-error','Missing Email')
+                        view.validate(signInInfo.password.length >= 6 || signInInfo.password,'#password-error','Invalid Password')
+                    ];
 
                     // 3. submit data (next class)
                 }
@@ -70,8 +75,24 @@ const view = {
     validate(condition, queryErrorTag, messageError){
         if(condition){
             view.setText(queryErrorTag,'');
+            return true;
         } else {
             view.setText(queryErrorTag,messageError);
+            return false;
         }
+    },
+    allPassed(validate){
+        for (let result of validate) {
+            if(!result){
+                return false;
+            }
+        }
+        return true;
+    },
+    disable(query){
+        document.querySelector(query).setAttribute('disabled',true);
+    },
+    enable(query){
+        document.querySelector(query).removeAttribute('disabled');
     }
 }
